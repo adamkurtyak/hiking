@@ -52,9 +52,45 @@ jobs:
         run: |
           cd demo_peak
           dbt docs generate
+          ls -la target/  # Debug: show what files were created
+      
+      - name: Copy index.html
+        run: |
+          cp demo_peak/target/index.html demo_peak/target/index.html.bak
+          ls -la demo_peak/target/
       
       - name: Deploy docs to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./demo_peak/target
+          keep_files: false
+```
+
+---
+
+## 🎯 **What should happen:**
+
+After `dbt docs generate`, these files should be in `demo_peak/target/`:
+- ✅ `index.html` (the dbt docs page)
+- ✅ `catalog.json` (model metadata)
+- ✅ `manifest.json` (project structure)
+- ✅ `graph.gpickle` (lineage graph)
+
+---
+
+## 📊 **Check the workflow logs:**
+
+After running the updated workflow:
+
+1. Go to **Actions** tab
+2. Click the workflow run
+3. Expand **"Generate dbt docs"** step
+4. Look for the `ls -la target/` output
+
+**You should see:**
+```
+index.html
+catalog.json
+manifest.json
+graph.gpickle
