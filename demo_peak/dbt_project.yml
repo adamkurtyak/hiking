@@ -1,0 +1,15 @@
+name: 'demo_peak'
+version: '1.0.0'
+config-version: 2
+profile: 'hiking'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+models:
+  demo_peak:
+    +materialized: view
