@@ -1,21 +1,15 @@
-- name: Generate dbt docs
-  run: |
-    cd demo_peak
-    dbt docs generate
-
-- name: Deploy docs to GitHub Pages
-  uses: peaceiris/actions-gh-pages@v3
-  with:
-    github_token: ${{ secrets.GITHUB_TOKEN }}
-    publish_dir: ./demo_peak/target
+name: dbt Deploy and Docs
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
-  deploy-dbt:
+  deploy-and-docs:
     runs-on: ubuntu-latest
     
     steps:
@@ -28,8 +22,7 @@ jobs:
           python-version: '3.11'
       
       - name: Install dbt
-        run: |
-          pip install dbt-core dbt-snowflake
+        run: pip install dbt-core dbt-snowflake
       
       - name: Configure dbt profile
         run: |
@@ -50,12 +43,18 @@ jobs:
                 threads: 1
           EOF
       
-      - name: Run dbt debug
-        run: |
-          cd demo_peak
-          dbt debug
-      
       - name: Run dbt
         run: |
           cd demo_peak
           dbt run
+      
+      - name: Generate dbt docs
+        run: |
+          cd demo_peak
+          dbt docs generate
+      
+      - name: Deploy docs to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./demo_peak/target
