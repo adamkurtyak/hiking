@@ -1,5 +1,5 @@
 -- models/marts/high_peaks.sql
--- Peaks higher than 2000 meters classified as 'Csúcs'
+-- Kétezer méter fölötti csúcsok
 
 select 
     peak_name,
